@@ -7,7 +7,8 @@ torch>=2.1.2
 transformers>=4.39
 scipy
 numpy 
-fasttext-wheel
+#fasttext-wheel
+fasttext
 
 langchain_openai
 langchain_core
