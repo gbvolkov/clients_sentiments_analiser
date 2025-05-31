@@ -3,8 +3,13 @@ scikit-learn
 openpyxl
 
 deeppavlov
-torch==2.1.2
+torch>=2.1.2
 transformers>=4.39
 scipy
 numpy 
 fasttext-wheel
+
+langchain_openai
+langchain_core
+langchain
+python-dotenv
