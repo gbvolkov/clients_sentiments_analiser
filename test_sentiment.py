@@ -9,7 +9,7 @@ import json
 
 # 2. Point to your JSON config for the sentiment pipeline.
 #    This should be the same config you used for training:
-CONFIG_PATH = "./sentiment/sentiments_model_inject.json"
+CONFIG_PATH = "./sentiment/sentiments_model_interfer.json"
 
 # 3. Load the trained pipeline. 
 #    Setting `download=False` skips re-downloading embeddings/etc.
