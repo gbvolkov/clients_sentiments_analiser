@@ -1,0 +1,87 @@
+{
+  "dataset_reader": {
+    "class_name":    "basic_classification_reader",
+    "data_path":     "./data/tagging/",
+    "train":         "train.csv",
+    "valid":         "valid.csv",
+    "test":          "test.csv",
+    "x_col":         "text",
+    "y_col":         ["tags"],
+
+    "delimiter":     ",",
+
+    "label_vocab": {
+      "Без замечаний (все понравилось).": 0,
+      "Процесс рассмотрения и согласования сделки. Скорость.": 1,
+      "Процесс рассмотрения и согласования сделки. Качество.": 2,
+      "Передача ПЛ. Скорость.": 3,
+      "Передача ПЛ. Качество процесса.": 4,
+      "Документооборот. Скорость подготовки и подписания договоров.": 5,
+      "Документооборот. Скорость подготовки бухгалтерских документов.": 6,
+      "Документооборот. Качество бухгалтерских документов.": 7,
+      "Обработка обращений клиента. Скорость.": 8,
+      "Обработка обращений клиента. Качество.": 9,
+      "Взаимодействие с сотрудниками. Скорость.": 10,
+      "Взаимодействие с сотрудниками. Качество.": 11,
+      "Условия лизинга. Стоимость.": 12,
+      "Условия лизинга. Штрафы. Пени.": 13,
+      "Поставщик. Скорость.": 14,
+      "Поставщик. Качество ПЛ. Качество сервисного обслуживания.": 15,
+      "Страхование. Перечень. Условия. Страховые случаи.": 16,
+      "Личный кабинет. Удобство. Функциональность.": 17,
+      "Все ужасно (нет положительного опыта).": 18,
+      "Прочее.": 19
+    },
+    "multi_label_reader": true
+  },
+
+  "chainer": {
+    "in":  ["x"],
+    "out": ["y_pred"],
+    "pipe": [
+      {
+        "name":            "transformers_bert_preprocessor",
+        "vocab_file":      "deeppavlov/rubert-base-cased-vocab.txt",
+        "do_lower_case":   false,
+        "pretrained_bert": "deeppavlov/rubert-base-cased"
+      },
+      {
+        "name":            "transformers_bert_embedder",
+        "pretrained_bert": "deeppavlov/rubert-base-cased",
+        "do_lower_case":   false,
+        "output_hidden_states": false
+      },
+      {
+        "name":       "torch_transformers_classifier",
+        "in":         ["bert_embeddings"],
+        "out":        ["y_pred"],
+        "dropout":    0.1,
+        "optimizer":  {
+          "type":         "AdamW",
+          "lr":           2e-5,
+          "weight_decay": 0.01
+        },
+        "n_classes":            20,
+        "activation":           "sigmoid",
+        "loss":                 "binary_crossentropy",
+        "activation_threshold": 0.5
+      }
+    ]
+  },
+
+  "train": {
+    "batch_size":         16,
+    "epochs":             10,
+    "metrics": [
+      "f1_micro",
+      "f1_macro",
+      "precision_macro",
+      "recall_macro"
+    ],
+    "save_best":          true,
+    "validation_patience": 3
+  },
+
+  "validation_patience": 3,
+  "validation_metrics": ["f1_macro"]
+}
