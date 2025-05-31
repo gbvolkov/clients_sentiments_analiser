@@ -1,0 +1,10 @@
+pandas
+scikit-learn
+openpyxl
+
+deeppavlov
+torch==2.1.2
+transformers>=4.39
+scipy
+numpy 
+fasttext-wheel
